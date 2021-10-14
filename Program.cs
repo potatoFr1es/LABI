@@ -5,73 +5,149 @@ using System.Linq;
 
 namespace laba1
 {
+
+	class Calculator
+{
+    string[] nums;
+    string[] signs;
+ 
+    public void Run()
+    {
+        Input();
+        int result = Calculate(0, Convert.ToInt32(nums[0], 2), Convert.ToInt32(nums[1], 2));
+        Console.WriteLine("Output: " + Convert.ToString(result, 2));
+    }
+ 
+    void Input()
+    {
+        Console.Write("Input: ");
+        string[] parts = Console.ReadLine().Split(' ');
+ 
+        signs = new string[(parts.Length - 1) / 2];
+        for (int i = 0; i < signs.Length; i++)
+            signs[i] = parts[i * 2 + 1];
+ 
+        nums = new string[(parts.Length - 1) / 2 + 1];
+        for (int i = 0; i < nums.Length; i++)
+            nums[i] = parts[i * 2];
+    }
+ 
+    int Calculate(int signIndex, int a, int b)
+    {
+        int result = 0;
+        switch(signs[signIndex])
+        {
+            case "+": result = a + b; break;
+            case "-": result = a - b; break;
+            case "*": result = a * b; break;
+            case "/": result = a / b; break;
+        }
+        if (signIndex == signs.Length - 1)
+            return result;
+        signIndex++;
+        return Calculate(signIndex, result, Convert.ToInt32(nums[signIndex + 1], 2));
+    }
+}
+// ПОПРОБОВАТЬ СОЕДИНИТЬ КЛАССЫ !!!!!
+
+	// class Bi
+	// {
+	// 	int sign;
+	// 	int num;
+	// 	public Bi(int n)
+	// 	{
+	// 		if (n < 0)
+	// 		{
+	// 			sign = -1;
+	// 			num = n * (-1);
+	// 		}
+	// 		else
+	// 		{
+	// 			sign = 1;
+	// 			num = n;
+	// 		}
+	// 		GetString(num, sign);
+	// 	}
+		
+		// static string GetString(int num, int sign)
+		// {
+		// 	string res;
+
+		// 	res = ConvertTo2(Convert.ToString(num));
+		// 	if (sign == -1)
+		// 		res.Insert(0, "-");
+		// 	return (res);
+		// }
+
+	// 	public static string ConvertTo2(string num, int round = 5)
+	// 		{
+	// 			string result = ""; //Результат
+	// 			int left = 0; //Целая часть
+	// 			int right = 0; //Дробная часть
+	// 			string[] temp1 = num.Split(new char[] { '.', ',' }); //Нужна для разделения целой и дробной частей
+	// 			left = Convert.ToInt32(temp1[0]);
+	// 			//Проверяем имеется ли у нас дробная часть
+	// 			if (temp1.Count() > 1)
+	// 			{
+	// 				right = Convert.ToInt32(num.Split(new char[] { '.', ',' })[1]); //Дробная часть
+	// 			}
+	// 			//Алгоритм перевода целой части в двоичную систему
+	// 			while (true)
+	// 			{
+	// 				result += left % 2; //В ответ помещаем остаток от деления. В конце программы мы перевернём строку, так как в обратном порядке записываются остатки
+	// 				left = left / 2; //Так как Left целое число, то при делении например числа 2359 на 2, мы получим не 1179,5 а 1179
+	// 				if (left == 0)
+	// 					break;
+	// 			}
+	// 			result = new string(result.ToCharArray().Reverse().ToArray()); //Реверсирование строки
+	// 			/*Не углублялся в ситуацию, но вдруг при реверсе появятся первые символы нули, а ведь их мы не пишем!
+	// 			Не знаю есть ли необходимость в этом цикле */
+	// 			while (true)
+	// 			{
+	// 				int i = 0;
+	// 				if (result[i] == '0')
+	// 					result = result.Remove(i, 1);
+	// 				else break;
+	// 			}
+	// 			//Прокеряем есть ли у нас дробная часть, можно было бы проверить и так if(temp1.count()>1)
+	// 			if (right == 0)
+	// 				return result;
+
+	// 			//Добавляем разделить целой части от дробной
+	// 			result += '.';
+
+	// 			int count = right.ToString().Count(); // Нам нужно знать кол-во цифр, при превышении которого дописывается единичка
+
+	// 			for (int i = 0; i < round; i++)
+	// 			{
+	// 				/*Умножаем число на 2 и проверяем, стало ли оно больше по количеству цифр, если да,
+	// 				то в результат идёт "1" и первая цифра у right удаляется */
+	// 				right = right * 2;
+	// 				if (right.ToString().Count() > count)
+	// 				{
+	// 					string buf = right.ToString();
+	// 					buf = buf.Remove(0, 1);
+	// 					right = Convert.ToInt32(buf);
+
+	// 					result += '1';
+	// 				}
+	// 				else
+	// 				{
+	// 					result += '0';
+	// 				}
+	// 			}
+	// 		return result;
+	// 	}
+
+	// }
+
     class Program
     {
-        public static string ConvertTo2(string num, int round = 5)
-        {
-            string result = ""; //Результат
-            int left = 0; //Целая часть
-            int right = 0; //Дробная часть
-            string[] temp1 = num.Split(new char[] { '.', ',' }); //Нужна для разделения целой и дробной частей
-            left = Convert.ToInt32(temp1[0]);
-            //Проверяем имеется ли у нас дробная часть
-            if (temp1.Count() > 1)
-            {
-                right = Convert.ToInt32(num.Split(new char[] { '.', ',' })[1]); //Дробная часть
-            }
-            //Алгоритм перевода целой части в двоичную систему
-            while (true)
-            {
-                result += left % 2; //В ответ помещаем остаток от деления. В конце программы мы перевернём строку, так как в обратном порядке записываются остатки
-                left = left / 2; //Так как Left целое число, то при делении например числа 2359 на 2, мы получим не 1179,5 а 1179
-                if (left == 0)
-                    break;
-            }
-            result = new string(result.ToCharArray().Reverse().ToArray()); //Реверсирование строки
-            /*Не углублялся в ситуацию, но вдруг при реверсе появятся первые символы нули, а ведь их мы не пишем!
-            Не знаю есть ли необходимость в этом цикле */
-            while (true)
-            {
-                int i = 0;
-                if (result[i] == '0')
-                    result = result.Remove(i, 1);
-                else break;
-            }
-            //Прокеряем есть ли у нас дробная часть, можно было бы проверить и так if(temp1.count()>1)
-            if (right == 0)
-                return result;
-
-            //Добавляем разделить целой части от дробной
-            result += '.';
-
-            int count = right.ToString().Count(); // Нам нужно знать кол-во цифр, при превышении которого дописывается единичка
-
-            for (int i = 0; i < round; i++)
-            {
-                /*Умножаем число на 2 и проверяем, стало ли оно больше по количеству цифр, если да,
-                то в результат идёт "1" и первая цифра у right удаляется */
-                right = right * 2;
-                if (right.ToString().Count() > count)
-                {
-                    string buf = right.ToString();
-                    buf = buf.Remove(0, 1);
-                    right = Convert.ToInt32(buf);
-
-                    result += '1';
-                }
-                else
-                {
-                    result += '0';
-                }
-            }
-            return result;
-        }
         static void Main(string[] args)
         {
-            string a = "10.15";
-            string b = ConvertTo2(a, 1);
-            Console.WriteLine(b);
-            Console.WriteLine(ConvertTo2(a, 5));
+			Calculator calc = new Calculator();
+       		calc.Run();
+        	Console.ReadKey();
         }
     }
 }
